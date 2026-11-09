@@ -1,4 +1,5 @@
 torch>=2.0
+# torch-geometric仅用于加载 Cora 数据集（Planetoid）
 torch-geometric>=2.4
 numpy>=1.24
 pyyaml>=6.0
