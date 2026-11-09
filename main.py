@@ -10,7 +10,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--config",
         type=str,
-        default="configs/default.yaml",
+        default="configs/matrix/default.yaml",
         help="Path to the experiment config file.",
     )
     parser.add_argument(

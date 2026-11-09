@@ -1,6 +1,3 @@
-
-"""Train a two-layer GCN on Cora."""
-
 import argparse
 import json
 import random
@@ -24,7 +21,7 @@ def build_parser():
     parser.add_argument(
         "--config",
         type=str,
-        default="configs/cora.yaml",
+        default="configs/single/cora.yaml",
         help="Path to YAML config.",
     )
 
