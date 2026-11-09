@@ -1,0 +1,23 @@
+
+experiment:
+  name: gcn-cora
+  seed: 42
+
+data:
+  name: Cora
+  root: data/Planetoid
+
+model:
+  type: gcn
+  hidden_dim: 16
+  num_layers: 2
+  dropout: 0.5
+
+train:
+  epochs: 200
+  learning_rate: 0.01
+  weight_decay: 0.0005
+
+output:
+  dir: outputs
+  save_weights: false
