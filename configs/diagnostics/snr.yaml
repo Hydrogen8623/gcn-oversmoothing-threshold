@@ -1,0 +1,30 @@
+experiment:
+  name: sbm-snr-diagnostic
+  seed_list: [0, 1, 2, 3, 4]
+
+data:
+  type: synthetic
+  num_communities: 4
+  nodes_per_community: 500
+  feature_dim: 16
+  edge_prob_intra: 0.08
+  edge_prob_inter: 0.01
+  noise_scale_list: [0.1, 0.5, 1.0]
+
+model:
+  type: gcn
+  hidden_dim: 64
+  num_layers_list: [1, 2, 4]
+  dropout: 0.5
+
+train:
+  epochs: 200
+  learning_rate: 0.01
+  weight_decay: 0.0005
+  train_ratio: 0.6
+  val_ratio: 0.2
+  test_ratio: 0.2
+
+output:
+  dir: outputs/diagnostics/snr
+  save_weights: false

@@ -112,3 +112,70 @@ def test_same_seed_produces_identical_graph():
 
     for array1, array2 in zip(result1, result2):
         assert array1.tobytes() == array2.tobytes()
+
+def test_noise_scale_changes_features_but_not_graph():
+    """Changing noise scale should only change node features."""
+    kwargs = dict(
+        num_communities=4,
+        nodes_per_community=20,
+        feature_dim=16,
+        edge_prob_intra=0.2,
+        edge_prob_inter=0.01,
+        seed=42,
+    )
+
+    adj_low, features_low, labels_low = generate_sbm_graph(
+        **kwargs,
+        noise_scale=0.1,
+    )
+
+    adj_high, features_high, labels_high = generate_sbm_graph(
+        **kwargs,
+        noise_scale=1.0,
+    )
+
+    assert np.array_equal(adj_low, adj_high)
+    assert np.array_equal(labels_low, labels_high)
+    assert not np.array_equal(features_low, features_high)
+
+
+def test_default_noise_scale_is_compatible():
+    """Default noise scale should equal explicitly setting 0.1."""
+    kwargs = dict(
+        num_communities=4,
+        nodes_per_community=20,
+        feature_dim=16,
+        edge_prob_intra=0.2,
+        edge_prob_inter=0.01,
+        seed=42,
+    )
+
+    default_result = generate_sbm_graph(**kwargs)
+    explicit_result = generate_sbm_graph(
+        **kwargs,
+        noise_scale=0.1,
+    )
+
+    for a, b in zip(default_result, explicit_result):
+        assert np.array_equal(a, b)
+
+
+def test_invalid_noise_scale():
+    """Invalid noise scales should raise ValueError."""
+    import pytest
+
+    kwargs = dict(
+        num_communities=4,
+        nodes_per_community=20,
+        feature_dim=16,
+        edge_prob_intra=0.2,
+        edge_prob_inter=0.01,
+        seed=42,
+    )
+
+    for noise_scale in [-0.1, np.nan, np.inf, -np.inf]:
+        with pytest.raises(ValueError):
+            generate_sbm_graph(
+                **kwargs,
+                noise_scale=noise_scale,
+            )

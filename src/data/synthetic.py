@@ -15,6 +15,7 @@ def generate_sbm_graph(
     edge_prob_inter: float,
     seed: int,
     isolated_node_indices: Sequence[int] | None = None,
+    noise_scale: float = 0.1,
 ) -> tuple[
     npt.NDArray[np.uint8],
     npt.NDArray[np.float32],
@@ -32,6 +33,7 @@ def generate_sbm_graph(
         edge_prob_inter: Edge probability between communities.
         seed: Random seed for reproducibility.
         isolated_node_indices: Node indices that should have no edges.
+        noise_scale: Standard deviation of Gaussian feature noise.
 
     Returns:
         adjacency: Symmetric binary adjacency matrix, shape (N, N).
@@ -47,6 +49,9 @@ def generate_sbm_graph(
 
     if feature_dim < 1:
         raise ValueError("feature_dim must be >= 1.")
+
+    if not np.isfinite(noise_scale) or noise_scale < 0:
+        raise ValueError("noise_scale must be finite and >= 0.")
 
     for name, probability in (
         ("edge_prob_intra", edge_prob_intra),
@@ -124,7 +129,7 @@ def generate_sbm_graph(
 
     noise = rng.normal(
         loc=0.0,
-        scale=0.1,
+        scale=noise_scale,
         size=(num_nodes, feature_dim),
     )
 

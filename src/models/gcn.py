@@ -129,7 +129,9 @@ class GCN(nn.Module):
         self,
         x: torch.Tensor,
         adj_norm: torch.Tensor,
-    ) -> torch.Tensor:
+        return_hidden: bool = False,
+    ):
+        hidden_states = []
 
         for i, conv in enumerate(self.convs):
 
@@ -143,5 +145,9 @@ class GCN(nn.Module):
 
             if i < self.n_layers - 1:
                 x = F.relu(x)
+                hidden_states.append(x)
+
+        if return_hidden:
+            return x, hidden_states
 
         return x
